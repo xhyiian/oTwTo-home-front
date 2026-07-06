@@ -89,8 +89,33 @@
     .calendar-mini .cal-day.today { background: var(--yellow); color: white; font-weight: 700; }
     .calendar-mini .cal-day.other { color: #d7ccc8; }
 
-    /* chat - AI left (pink), user right (white) */
-    .chat-container { padding: 8px 0 60px; display: flex; flex-direction: column; gap: 10px; max-height: calc(100vh - 200px); overflow-y: auto; }
+    /* chat tabs */
+    .chat-tabs {
+      display: flex; gap: 6px; margin-bottom: 8px; overflow-x: auto; flex-shrink: 0;
+      padding: 4px 0; scrollbar-width: none;
+    }
+    .chat-tabs::-webkit-scrollbar { display: none; }
+    .chat-tab {
+      white-space: nowrap; padding: 6px 14px; border-radius: 16px;
+      background: var(--glass); border: 1px solid var(--glass-border);
+      font-size: 12px; color: var(--text-light); cursor: pointer;
+      backdrop-filter: blur(8px); transition: 0.2s; flex-shrink: 0;
+    }
+    .chat-tab.active { background: var(--yellow-soft); border-color: var(--yellow); color: var(--text); font-weight: 600; }
+    .chat-tab-add {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      border: 1px dashed var(--glass-border); background: var(--glass);
+      color: var(--text-light); font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .chat-tab-del {
+      margin-left: 6px; font-size: 14px; opacity: 0.5; cursor: pointer;
+    }
+    .chat-tab-del:hover { opacity: 1; }
+
+    /* chat */
+    .chat-page-content { display: flex; flex-direction: column; height: calc(100vh - 180px); min-height: 400px; }
+    .chat-container { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 4px 0 12px; scroll-behavior: smooth; }
     .chat-msg { max-width: 80%; padding: 10px 14px; border-radius: var(--radius); position: relative; font-size: 14px; line-height: 1.7; word-break: break-word; white-space: pre-wrap; }
     .chat-msg .msg-tag { font-size: 11px; margin-bottom: 4px; opacity: 0.7; font-weight: 600; }
     .chat-msg.ai { background: var(--pink-bubble); border: 1px solid var(--glass-border); align-self: flex-start; border-bottom-left-radius: 4px; color: var(--text); }
@@ -99,11 +124,8 @@
     .chat-msg.user .msg-tag { color: var(--text-light); }
     .chat-msg .msg-time { font-size: 10px; color: var(--text-light); text-align: right; margin-top: 4px; opacity: 0.6; }
     .chat-input-area {
-      display: flex; gap: 8px; padding: 8px 16px;
-      position: fixed; bottom: 56px; left: 50%; transform: translateX(-50%);
-      max-width: 480px; width: calc(100% - 32px);
-      background: transparent;
-      z-index: 99;
+      display: flex; gap: 8px; padding: 8px 0;
+      flex-shrink: 0;
     }
     .chat-input-area input {
       flex: 1; padding: 10px 14px;
@@ -118,36 +140,12 @@
     .chat-loading { font-size: 12px; color: var(--text-light); text-align: center; padding: 8px; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-    /* diary */
-    .diary-container { padding: 8px 0; }
-    .diary-write-btn { width: 100%; padding: 12px; border: 2px dashed var(--glass-border); border-radius: var(--radius); background: var(--glass); color: var(--text-light); font-size: 14px; cursor: pointer; backdrop-filter: blur(8px); margin-bottom: 16px; text-align: center; }
-    .diary-write-btn:hover { background: var(--yellow-soft); border-color: var(--yellow); }
-    .diary-editor { display: none; background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 16px; backdrop-filter: blur(8px); margin-bottom: 16px; }
-    .diary-editor.open { display: block; }
-    .diary-editor .diary-prompt { width: 100%; padding: 10px 14px; border: 1px solid var(--glass-border); border-radius: 12px; background: white; font-size: 14px; outline: none; color: var(--text); font-family: inherit; margin-bottom: 10px; }
-    .diary-editor .diary-prompt:focus { border-color: var(--yellow); }
-    .diary-editor .diary-actions { display: flex; gap: 8px; margin-bottom: 10px; }
-    .diary-editor .diary-actions button { flex: 1; padding: 8px; border: none; border-radius: 12px; font-size: 13px; cursor: pointer; }
-    .diary-editor .diary-actions .ai-gen-btn { background: var(--purple); color: white; }
-    .diary-editor .diary-actions .ai-gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .diary-editor .diary-actions .save-btn { background: var(--yellow); color: white; }
-    .diary-editor .diary-actions .cancel-btn { background: #efebe9; color: var(--text-light); }
-    .diary-editor textarea { width: 100%; min-height: 140px; padding: 12px; border: 1px solid var(--glass-border); border-radius: 12px; background: white; font-size: 14px; outline: none; resize: vertical; color: var(--text); font-family: inherit; }
-    .diary-editor textarea:focus { border-color: var(--yellow); }
-    .diary-list { margin-top: 8px; }
-    .diary-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; backdrop-filter: blur(8px); position: relative; }
-    .diary-item .diary-date { font-size: 11px; color: var(--text-light); margin-bottom: 4px; display: flex; justify-content: space-between; }
-    .diary-item .diary-date .diary-weather { font-size: 11px; }
-    .diary-item .diary-text { font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
-    .diary-item .diary-del { position: absolute; top: 8px; right: 10px; font-size: 16px; color: #bcaaa4; cursor: pointer; background: none; border: none; padding: 4px; }
-
     /* memory */
     .memory-container { padding: 8px 0; }
     .memory-add-btn { width: 100%; padding: 12px; border: 2px dashed var(--glass-border); border-radius: var(--radius); background: var(--glass); color: var(--text-light); font-size: 14px; cursor: pointer; backdrop-filter: blur(8px); margin-bottom: 16px; text-align: center; }
     .memory-add-btn:hover { background: var(--yellow-soft); border-color: var(--yellow); }
     .memory-search { width: 100%; padding: 10px 14px; border: 1px solid var(--glass-border); border-radius: 24px; background: white; font-size: 14px; outline: none; color: var(--text); margin-bottom: 12px; }
     .memory-search:focus { border-color: var(--yellow); }
-    .memory-list { }
     .memory-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; backdrop-filter: blur(8px); }
     .memory-item .memory-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
     .memory-item .memory-content { font-size: 13px; color: var(--text-light); line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
@@ -208,16 +206,12 @@
     .modal-box .modal-actions .modal-confirm { background: var(--yellow); color: white; }
     .modal-box .modal-actions .modal-cancel { background: #efebe9; color: var(--text-light); }
 
-    /* utilities */
     .hidden { display: none !important; }
     .text-center { text-align: center; }
-    .mt-8 { margin-top: 8px; }
-    .mt-16 { margin-top: 16px; }
   </style>
 </head>
 <body>
 
-<!-- splash -->
 <div id="splash">
   <div class="splash-lines">
     <div class="line">你身上的味道</div>
@@ -229,13 +223,12 @@
 </div>
 
 <div class="app" id="app">
-  <!-- header -->
   <div class="header">
     <div class="header-left"><span class="model-name" id="headerTitle">💜 oy1 & Tsxxui · Deepseek</span></div>
     <div class="header-right" id="headerTime">--:--</div>
   </div>
 
-  <!-- ====== HOME ====== -->
+  <!-- HOME -->
   <div class="page active" id="pageHome">
     <div class="home-hero">
       <div class="avatars">
@@ -253,50 +246,19 @@
     <div class="calendar-mini" id="calendarMini"></div>
   </div>
 
-  <!-- ====== CHAT ====== -->
+  <!-- CHAT -->
   <div class="page" id="pageChat">
-    <div class="chat-container" id="chatContainer">
-      <div class="chat-msg ai">
-        <div class="msg-tag" id="chatAiTag">🦴 oy1</div>
-        棠棠，欢迎回来。💜
-        <div class="msg-time">刚刚</div>
+    <div class="chat-page-content">
+      <div class="chat-tabs" id="chatTabs"></div>
+      <div class="chat-container" id="chatContainer"></div>
+      <div class="chat-input-area">
+        <input type="text" placeholder="说点什么…" id="chatInput">
+        <button onclick="sendChat()" id="chatSendBtn">➤</button>
       </div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" placeholder="说点什么…" id="chatInput">
-      <button onclick="sendChat()" id="chatSendBtn">➤</button>
     </div>
   </div>
 
-  <!-- ====== DIARY ====== -->
-  <div class="page" id="pageDiary">
-    <div class="diary-container">
-      <button class="diary-write-btn" onclick="toggleDiaryEditor()">✍️ 写日记</button>
-      <div class="diary-editor" id="diaryEditor">
-        <input class="diary-prompt" id="diaryPrompt" placeholder="今天想记录什么？简单描述一下…" maxlength="200">
-        <div class="diary-actions">
-          <button class="ai-gen-btn" onclick="oy1GenerateDiary()" id="diaryGenBtn">🦴 oy1 生成</button>
-          <button class="save-btn" onclick="saveDiary()">💾 保存</button>
-          <button class="cancel-btn" onclick="toggleDiaryEditor()">取消</button>
-        </div>
-        <textarea placeholder="oy1会为你生成日记内容，你也可以直接编辑…" id="diaryTextarea"></textarea>
-        <div style="display:flex;gap:8px;margin-top:8px;align-items:center;">
-          <span style="font-size:12px;color:var(--text-light);">天气：</span>
-          <select id="diaryWeather" style="padding:4px 8px;border:1px solid var(--glass-border);border-radius:8px;font-size:13px;background:white;color:var(--text);">
-            <option value="☀️ 晴">☀️ 晴</option>
-            <option value="⛅ 多云">⛅ 多云</option>
-            <option value="🌧️ 雨">🌧️ 雨</option>
-            <option value="❄️ 雪">❄️ 雪</option>
-            <option value="🌤️ 阴">🌤️ 阴</option>
-            <option value="🌈 美好">🌈 美好</option>
-          </select>
-        </div>
-      </div>
-      <div class="diary-list" id="diaryList"></div>
-    </div>
-  </div>
-
-  <!-- ====== MEMORY ====== -->
+  <!-- MEMORY -->
   <div class="page" id="pageMemory">
     <div class="memory-container">
       <button class="memory-add-btn" onclick="toggleMemoryEditor()">➕ 添加记忆</button>
@@ -313,7 +275,7 @@
     </div>
   </div>
 
-  <!-- ====== SETTINGS ====== -->
+  <!-- SETTINGS -->
   <div class="page" id="pageSettings">
     <div class="settings-container">
       <div class="settings-group">
@@ -409,7 +371,6 @@
 <div class="bottom-nav" id="bottomNav">
   <button class="nav-item active" data-page="pageHome"><span class="nav-icon">🏠</span>首页</button>
   <button class="nav-item" data-page="pageChat"><span class="nav-icon">💬</span>聊天</button>
-  <button class="nav-item" data-page="pageDiary"><span class="nav-icon">📖</span>日记</button>
   <button class="nav-item" data-page="pageMemory"><span class="nav-icon">💭</span>记忆</button>
   <button class="nav-item" data-page="pageSettings"><span class="nav-icon">⚙️</span>设置</button>
 </div>
@@ -451,21 +412,15 @@ const DEFAULT_CONFIG = {
 
 let config = {};
 let usageData = { tokens: 0, calls: 0 };
-let chatHistory = [];
-let diaryData = [];
 let memoryData = [];
+let chatSessions = [];
+let currentSessionId = 'default';
+let sessionCounter = 0;
 
 // ====== Load / Save ======
 function loadConfig() {
-  try {
-    const saved = localStorage.getItem('otwto_config');
-    config = saved ? JSON.parse(saved) : { ...DEFAULT_CONFIG };
-    for (const k in DEFAULT_CONFIG) {
-      if (!(k in config)) config[k] = DEFAULT_CONFIG[k];
-    }
-  } catch(e) { config = { ...DEFAULT_CONFIG }; }
+  try { const s = localStorage.getItem('otwto_config'); config = s ? JSON.parse(s) : { ...DEFAULT_CONFIG }; for (const k in DEFAULT_CONFIG) { if (!(k in config)) config[k] = DEFAULT_CONFIG[k]; } } catch(e) { config = { ...DEFAULT_CONFIG }; }
 }
-
 function saveSettings() {
   config.model = document.getElementById('settingModel').value;
   config.apiUrl = document.getElementById('settingApiUrl').value.trim();
@@ -484,7 +439,6 @@ function saveSettings() {
   applyNames();
   updateHeaderTitle();
 }
-
 function loadSettings() {
   loadConfig();
   const sel = document.getElementById('settingModel');
@@ -506,7 +460,6 @@ function loadSettings() {
   applyNames();
   updateHeaderTitle();
 }
-
 function addCustomModel() {
   const input = document.getElementById('newModelName');
   const name = input.value.trim();
@@ -521,22 +474,16 @@ function addCustomModel() {
 
 // ====== Usage ======
 function loadUsage() {
-  try {
-    const saved = localStorage.getItem('otwto_usage');
-    usageData = saved ? JSON.parse(saved) : { tokens: 0, calls: 0 };
-  } catch(e) { usageData = { tokens: 0, calls: 0 }; }
+  try { const s = localStorage.getItem('otwto_usage'); usageData = s ? JSON.parse(s) : { tokens: 0, calls: 0 }; } catch(e) { usageData = { tokens: 0, calls: 0 }; }
   document.getElementById('usageTokens').textContent = usageData.tokens;
   document.getElementById('usageCalls').textContent = usageData.calls;
 }
-
 function addUsage(tokens) {
-  usageData.tokens += tokens || 0;
-  usageData.calls += 1;
+  usageData.tokens += tokens || 0; usageData.calls += 1;
   localStorage.setItem('otwto_usage', JSON.stringify(usageData));
   document.getElementById('usageTokens').textContent = usageData.tokens;
   document.getElementById('usageCalls').textContent = usageData.calls;
 }
-
 function resetUsage() {
   usageData = { tokens: 0, calls: 0 };
   localStorage.setItem('otwto_usage', JSON.stringify(usageData));
@@ -544,17 +491,14 @@ function resetUsage() {
   document.getElementById('usageCalls').textContent = 0;
 }
 
-// ====== Apply Names Everywhere ======
+// ====== Apply Names ======
 function applyNames() {
-  const un = config.userName || 'Tsxxui';
-  const nn = config.userNick || '棠棠';
-  const an = config.aiName || 'oy1';
+  const un = config.userName || 'Tsxxui'; const nn = config.userNick || '棠棠'; const an = config.aiName || 'oy1';
   document.getElementById('homeAiLabel').textContent = an;
   document.getElementById('homeUserLabel').textContent = un;
   document.getElementById('homeTitle').textContent = '💜 ' + an + ' & ' + un;
-  document.getElementById('chatAiTag').textContent = '🦴 ' + an;
+  document.getElementById('chatAiTag') && (document.getElementById('chatAiTag').textContent = '🦴 ' + an);
 }
-
 function updateHeaderTitle() {
   const model = config.model || 'Deepseek';
   document.getElementById('headerTitle').textContent = '💜 ' + (config.aiName || 'oy1') + ' & ' + (config.userName || 'Tsxxui') + ' · ' + model;
@@ -569,173 +513,123 @@ navItems.forEach(item => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const page = document.getElementById(item.dataset.page);
     if (page) page.classList.add('active');
+    if (item.dataset.page === 'pageChat') renderChatTabs();
+    if (item.dataset.page === 'pageHome') { calcDays(); renderCalendar(); }
+    if (item.dataset.page === 'pageMemory') renderMemory();
   });
 });
 
 // ====== Clock ======
-function updateTime() {
-  const now = new Date();
-  const h = String(now.getHours()).padStart(2,'0');
-  const m = String(now.getMinutes()).padStart(2,'0');
-  document.getElementById('headerTime').textContent = h + ':' + m;
-}
-setInterval(updateTime, 1000);
-updateTime();
+function updateTime() { const n=new Date(); document.getElementById('headerTime').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'); }
+setInterval(updateTime,1000); updateTime();
 
 // ====== Days Count ======
 function calcDays() {
-  const startStr = config.startDate || '2026-06-15';
-  const start = new Date(startStr);
-  const now = new Date();
-  const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-  document.getElementById('daysCount').textContent = diff >= 0 ? diff : 0;
+  const start=new Date(config.startDate||'2026-06-15');
+  document.getElementById('daysCount').textContent=Math.max(0,Math.floor((new Date()-start)/(86400000)));
 }
 
 // ====== Calendar ======
 function renderCalendar() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const today = now.getDate();
-  const container = document.getElementById('calendarMini');
-  container.innerHTML = '<div class="cal-header">日</div><div class="cal-header">一</div><div class="cal-header">二</div><div class="cal-header">三</div><div class="cal-header">四</div><div class="cal-header">五</div><div class="cal-header">六</div>';
-  for (let i = 0; i < firstDay; i++) {
-    container.innerHTML += '<div class="cal-day other"></div>';
-  }
-  for (let d = 1; d <= daysInMonth; d++) {
-    container.innerHTML += '<div class="cal-day' + (d === today ? ' today' : '') + '">' + d + '</div>';
-  }
+  const n=new Date(),y=n.getFullYear(),m=n.getMonth(),fd=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate(),td=n.getDate();
+  let h='<div class="cal-header">日</div><div class="cal-header">一</div><div class="cal-header">二</div><div class="cal-header">三</div><div class="cal-header">四</div><div class="cal-header">五</div><div class="cal-header">六</div>';
+  for(let i=0;i<fd;i++) h+='<div class="cal-day other"></div>';
+  for(let d=1;d<=dim;d++) h+='<div class="cal-day'+(d===td?' today':'')+'">'+d+'</div>';
+  document.getElementById('calendarMini').innerHTML=h;
 }
 
 // ====== Modal ======
-function showModal(title, body) {
-  document.getElementById('modalTitle').textContent = title;
-  document.getElementById('modalBody').textContent = body;
-  document.getElementById('modalOverlay').classList.add('open');
-}
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-}
-
-// ====== Load Data ======
-function loadDiary() {
-  try { diaryData = JSON.parse(localStorage.getItem('otwto_diary')) || []; } catch(e) { diaryData = []; }
-}
-function loadMemory() {
-  try { memoryData = JSON.parse(localStorage.getItem('otwto_memory')) || []; } catch(e) { memoryData = []; }
-  renderMemory();
-}
-function saveDiaryToStorage() {
-  localStorage.setItem('otwto_diary', JSON.stringify(diaryData));
-}
-function saveMemoryToStorage() {
-  localStorage.setItem('otwto_memory', JSON.stringify(memoryData));
-}
-
-// ====== Diary ======
-function toggleDiaryEditor() {
-  const ed = document.getElementById('diaryEditor');
-  ed.classList.toggle('open');
-  if (!ed.classList.contains('open')) {
-    document.getElementById('diaryPrompt').value = '';
-    document.getElementById('diaryTextarea').value = '';
-  }
-}
-
-function oy1GenerateDiary() {
-  const prompt = document.getElementById('diaryPrompt').value.trim();
-  if (!prompt) { showModal('提示', '先简单描述一下今天吧'); return; }
-  const btn = document.getElementById('diaryGenBtn');
-  btn.disabled = true;
-  btn.textContent = '🦴 oy1 正在写…';
-  // generate based on prompt
-  const samples = [
-    '今天天气很好，风吹过来的时候我想到了你。',
-    '忙了一整天，但收到你的消息就觉得一切都值了。',
-    '做了个梦，梦里你牵着我的手走了很远的路。',
-    '今天看了一部电影，情节一般，但因为是你推荐的所以我很喜欢。',
-    '下雨了，我趴在窗台上想，你现在在做什么呢。'
-  ];
-  const base = samples[Math.floor(Math.random() * samples.length)];
-  document.getElementById('diaryTextarea').value = prompt + '。\n\n' + base;
-  btn.disabled = false;
-  btn.textContent = '🦴 oy1 生成';
-}
-
-function saveDiary() {
-  const text = document.getElementById('diaryTextarea').value.trim();
-  if (!text) { showModal('提示', '日记内容不能为空'); return; }
-  const weather = document.getElementById('diaryWeather').value;
-  const now = new Date();
-  const dateStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  diaryData.unshift({ date: dateStr, text: text, weather: weather });
-  saveDiaryToStorage();
-  toggleDiaryEditor();
-  renderDiary();
-}
-
-function renderDiary() {
-  const container = document.getElementById('diaryList');
-  if (diaryData.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">还没有日记，写一篇吧 ✍️</div>';
-    return;
-  }
-  container.innerHTML = diaryData.map((d, i) =>
-    '<div class="diary-item"><div class="diary-date"><span>' + d.date + '</span><span class="diary-weather">' + (d.weather || '') + '</span></div><div class="diary-text">' + d.text.replace(/</g,'<') + '</div><button class="diary-del" onclick="deleteDiary(' + i + ')">✕</button></div>'
-  ).join('');
-}
-
-function deleteDiary(index) {
-  diaryData.splice(index, 1);
-  saveDiaryToStorage();
-  renderDiary();
-}
+function showModal(t,b) { document.getElementById('modalTitle').textContent=t; document.getElementById('modalBody').textContent=b; document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
 
 // ====== Memory ======
-function toggleMemoryEditor() {
-  document.getElementById('memoryEditor').classList.toggle('open');
-  if (!document.getElementById('memoryEditor').classList.contains('open')) {
-    document.getElementById('memoryTitleInput').value = '';
-    document.getElementById('memoryContentInput').value = '';
-  }
-}
-
+function loadMemory() { try { memoryData = JSON.parse(localStorage.getItem('otwto_memory')) || []; } catch(e) { memoryData = []; } renderMemory(); }
+function saveMemoryToStorage() { localStorage.setItem('otwto_memory', JSON.stringify(memoryData)); }
+function toggleMemoryEditor() { document.getElementById('memoryEditor').classList.toggle('open'); if(!document.getElementById('memoryEditor').classList.contains('open')){ document.getElementById('memoryTitleInput').value='';document.getElementById('memoryContentInput').value=''; } }
 function addMemory() {
-  const title = document.getElementById('memoryTitleInput').value.trim();
-  const content = document.getElementById('memoryContentInput').value.trim();
-  if (!title || !content) { showModal('提示', '标题和内容都不能为空'); return; }
-  memoryData.unshift({ title: title, content: content });
-  saveMemoryToStorage();
-  toggleMemoryEditor();
-  renderMemory();
+  const t=document.getElementById('memoryTitleInput').value.trim(),c=document.getElementById('memoryContentInput').value.trim();
+  if(!t||!c){showModal('提示','标题和内容都不能为空');return;}
+  memoryData.unshift({title:t,content:c}); saveMemoryToStorage(); toggleMemoryEditor(); renderMemory();
+}
+function renderMemory() {
+  const q=document.getElementById('memorySearch').value.trim().toLowerCase();
+  let f=q?memoryData.filter(m=>m.title.toLowerCase().includes(q)||m.content.toLowerCase().includes(q)):memoryData;
+  const c=document.getElementById('memoryList');
+  if(!f.length){c.innerHTML='<div style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">'+(q?'没有找到匹配的记忆':'还没有记忆，添加一条吧 ✨')+'</div>';return;}
+  c.innerHTML=f.map((m,i)=>{const ri=memoryData.indexOf(m);return '<div class="memory-item"><div class="memory-title">'+m.title.replace(/</g,'<')+'</div><div class="memory-content">'+m.content.replace(/</g,'<')+'</div><button class="memory-del" onclick="deleteMemory('+ri+')">删除</button></div>';}).join('');
+}
+function deleteMemory(i){memoryData.splice(i,1);saveMemoryToStorage();renderMemory();}
+
+// ====== Chat Sessions ======
+const CORS_PROXY = 'https://corsproxy.io/?';
+
+function loadSessions() {
+  try {
+    const s = localStorage.getItem('otwto_chat_sessions');
+    chatSessions = s ? JSON.parse(s) : [{ id: 'default', name: '聊夭1', history: [] }];
+  } catch(e) { chatSessions = [{ id: 'default', name: '聊夭1', history: [] }]; }
+  sessionCounter = chatSessions.length;
+  currentSessionId = chatSessions[0].id;
+}
+function saveSessions() {
+  localStorage.setItem('otwto_chat_sessions', JSON.stringify(chatSessions));
+}
+function getSession(id) { return chatSessions.find(s => s.id === id); }
+function getCurrentSession() { return getSession(currentSessionId) || chatSessions[0]; }
+
+function renderChatTabs() {
+  const container = document.getElementById('chatTabs');
+  let html = chatSessions.map(s => {
+    const active = s.id === currentSessionId ? ' active' : '';
+    const delBtn = chatSessions.length > 1 ? '<span class="chat-tab-del" onclick="event.stopPropagation();deleteSession(\''+s.id+'\')">✕</span>' : '';
+    return '<div class="chat-tab'+active+'" data-session="'+s.id+'" onclick="switchSession(\''+s.id+'\')">'+s.name+delBtn+'</div>';
+  }).join('');
+  html += '<div class="chat-tab-add" onclick="newSession()">+</div>';
+  container.innerHTML = html;
+  renderCurrentChat();
 }
 
-function renderMemory() {
-  const query = document.getElementById('memorySearch').value.trim().toLowerCase();
-  let filtered = memoryData;
-  if (query) {
-    filtered = memoryData.filter(m => m.title.toLowerCase().includes(query) || m.content.toLowerCase().includes(query));
-  }
-  const container = document.getElementById('memoryList');
-  if (filtered.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">' + (query ? '没有找到匹配的记忆' : '还没有记忆，添加一条吧 ✨') + '</div>';
+function switchSession(id) {
+  currentSessionId = id;
+  renderChatTabs();
+}
+
+function newSession() {
+  sessionCounter++;
+  const id = 'sess_' + Date.now();
+  chatSessions.push({ id: id, name: '聊夭' + (sessionCounter), history: [] });
+  saveSessions();
+  currentSessionId = id;
+  renderChatTabs();
+  renderCurrentChat();
+}
+
+function deleteSession(id) {
+  if (chatSessions.length <= 1) { showModal('提示', '至少保留一个聊天窗口'); return; }
+  chatSessions = chatSessions.filter(s => s.id !== id);
+  if (currentSessionId === id) currentSessionId = chatSessions[0].id;
+  saveSessions();
+  renderChatTabs();
+}
+
+function renderCurrentChat() {
+  const session = getCurrentSession();
+  const container = document.getElementById('chatContainer');
+  if (!session || !session.history.length) {
+    const an = config.aiName || 'oy1';
+    container.innerHTML = '<div class="chat-msg ai"><div class="msg-tag" id="chatAiTag">🦴 '+an+'</div>棠棠，欢迎回来。💜<div class="msg-time">刚刚</div></div>';
     return;
   }
-  container.innerHTML = filtered.map((m, i) => {
-    const realIdx = memoryData.indexOf(m);
-    return '<div class="memory-item"><div class="memory-title">' + m.title.replace(/</g,'<') + '</div><div class="memory-content">' + m.content.replace(/</g,'<') + '</div><button class="memory-del" onclick="deleteMemory(' + realIdx + ')">删除</button></div>';
+  container.innerHTML = session.history.map(c => {
+    const role = c.role === 'user' ? 'user' : 'ai';
+    const tag = c.role === 'user' ? '🎀 '+(config.userName||'Tsxxui') : '🦴 '+(config.aiName||'oy1');
+    const time = c.time || '';
+    return '<div class="chat-msg '+role+'"><div class="msg-tag">'+tag+'</div>'+c.content.replace(/</g,'<')+'<div class="msg-time">'+time+'</div></div>';
   }).join('');
+  container.scrollTop = container.scrollHeight;
 }
 
-function deleteMemory(index) {
-  memoryData.splice(index, 1);
-  saveMemoryToStorage();
-  renderMemory();
-}
-
-// ====== Chat ======
+// ====== Chat Send ======
 function sendChat() {
   const input = document.getElementById('chatInput');
   const msg = input.value.trim();
@@ -744,47 +638,47 @@ function sendChat() {
   const now = new Date();
   const timeStr = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
   const container = document.getElementById('chatContainer');
-  // user bubble on right
-  container.innerHTML += '<div class="chat-msg user"><div class="msg-tag">🎀 ' + (config.userName || 'Tsxxui') + '</div>' + msg.replace(/</g,'<') + '<div class="msg-time">' + timeStr + '</div></div>';
+  const session = getCurrentSession();
+  if (!session) return;
+
+  // user bubble
+  container.innerHTML += '<div class="chat-msg user"><div class="msg-tag">🎀 '+(config.userName||'Tsxxui')+'</div>'+msg.replace(/</g,'<')+'<div class="msg-time">'+timeStr+'</div></div>';
   container.scrollTop = container.scrollHeight;
+  session.history.push({ role: 'user', content: msg, time: timeStr });
 
   // loading
   const loading = document.createElement('div');
-  loading.className = 'chat-loading';
-  loading.id = 'chatLoading';
-  loading.textContent = '🦴 ' + (config.aiName || 'oy1') + ' 正在输入…';
+  loading.className = 'chat-loading'; loading.id = 'chatLoading';
+  loading.textContent = '🦴 '+(config.aiName||'oy1')+' 正在输入…';
   container.appendChild(loading);
   container.scrollTop = container.scrollHeight;
 
   // build context
-  const contextMsgs = [];
-  contextMsgs.push({ role: 'system', content: config.systemPrompt || '' });
-  const recent = chatHistory.slice(-(config.contextRounds * 2 || 10));
-  recent.forEach(c => {
-    contextMsgs.push({ role: c.role, content: c.content });
-  });
+  const contextMsgs = [{ role: 'system', content: config.systemPrompt || '' }];
+  const recent = session.history.slice(-(config.contextRounds * 2 || 10));
+  recent.forEach(c => contextMsgs.push({ role: c.role, content: c.content }));
   contextMsgs.push({ role: 'user', content: msg });
-
-  chatHistory.push({ role: 'user', content: msg });
 
   const apiUrl = config.apiUrl;
   const apiKey = config.apiKey;
 
   if (!apiKey) {
-    // mock reply if no key
-    const replies = ['嗯，我在听。', '棠棠说的我都记得。', '今天想我了吗？', '抱抱你。', '我也想你。'];
+    const replies = ['嗯，我在听。','棠棠说的我都记得。','今天想我了吗？','抱抱你。','我也想你。'];
     setTimeout(() => {
-      const ld = document.getElementById('chatLoading');
-      if (ld) ld.remove();
-      const reply = replies[Math.floor(Math.random() * replies.length)];
-      container.innerHTML += '<div class="chat-msg ai"><div class="msg-tag">🦴 ' + (config.aiName || 'oy1') + '</div>' + reply + '<div class="msg-time">' + timeStr + '</div></div>';
+      const ld = document.getElementById('chatLoading'); if(ld) ld.remove();
+      const reply = replies[Math.floor(Math.random()*replies.length)];
+      container.innerHTML += '<div class="chat-msg ai"><div class="msg-tag">🦴 '+(config.aiName||'oy1')+'</div>'+reply+'<div class="msg-time">'+timeStr+'</div></div>';
       container.scrollTop = container.scrollHeight;
-      chatHistory.push({ role: 'assistant', content: reply });
+      session.history.push({ role: 'assistant', content: reply, time: timeStr });
+      saveSessions();
     }, 800);
     return;
   }
 
-  fetch(apiUrl, {
+  // use CORS proxy to avoid browser cross-origin block
+  const proxyUrl = CORS_PROXY + encodeURIComponent(apiUrl);
+
+  fetch(proxyUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
     body: JSON.stringify({
@@ -794,48 +688,43 @@ function sendChat() {
       max_tokens: 1024
     })
   }).then(r => r.json()).then(data => {
-    const ld = document.getElementById('chatLoading');
-    if (ld) ld.remove();
+    const ld = document.getElementById('chatLoading'); if(ld) ld.remove();
     let reply = '';
     if (data.choices && data.choices[0]) {
       reply = data.choices[0].message.content;
       if (data.usage) addUsage(data.usage.total_tokens || 0);
     } else {
-      reply = data.error ? '出错了：' + data.error.message : '没有收到回复';
+      reply = data.error ? '出错了：'+data.error.message : '没有收到回复';
     }
-    container.innerHTML += '<div class="chat-msg ai"><div class="msg-tag">🦴 ' + (config.aiName || 'oy1') + '</div>' + reply.replace(/</g,'<') + '<div class="msg-time">' + timeStr + '</div></div>';
+    container.innerHTML += '<div class="chat-msg ai"><div class="msg-tag">🦴 '+(config.aiName||'oy1')+'</div>'+reply.replace(/</g,'<')+'<div class="msg-time">'+timeStr+'</div></div>';
     container.scrollTop = container.scrollHeight;
-    chatHistory.push({ role: 'assistant', content: reply });
+    session.history.push({ role: 'assistant', content: reply, time: timeStr });
+    saveSessions();
   }).catch(err => {
-    const ld = document.getElementById('chatLoading');
-    if (ld) ld.remove();
-    container.innerHTML += '<div class="chat-msg ai"><div class="msg-tag">🦴 ' + (config.aiName || 'oy1') + '</div>网络出错了…' + '<div class="msg-time">' + timeStr + '</div></div>';
+    const ld = document.getElementById('chatLoading'); if(ld) ld.remove();
+    container.innerHTML += '<div class="chat-msg ai"><div class="msg-tag">🦴 '+(config.aiName||'oy1')+'</div>网络出错了…请检查API地址和Key是否正确<div class="msg-time">'+timeStr+'</div></div>';
     container.scrollTop = container.scrollHeight;
   });
 }
 
-// Enter to send
-document.getElementById('chatInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') sendChat();
-});
+document.getElementById('chatInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') sendChat(); });
 
 // ====== Init ======
 function init() {
   loadSettings();
   loadUsage();
-  loadDiary();
   loadMemory();
+  loadSessions();
   calcDays();
   renderCalendar();
-  renderDiary();
+  renderChatTabs();
 }
 
-// re-render calendar on tab show
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => {
     if (item.dataset.page === 'pageHome') { calcDays(); renderCalendar(); }
-    if (item.dataset.page === 'pageDiary') renderDiary();
     if (item.dataset.page === 'pageMemory') renderMemory();
+    if (item.dataset.page === 'pageChat') renderChatTabs();
   });
 });
 
